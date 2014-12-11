@@ -1,15 +1,28 @@
 package graphs;
 
-public class ListGraph {
+import java.util.HashMap;
+import java.util.HashSet;
 
-	public void add();
+public class ListGraph<Typ> {
+
+	HashSet<Typ> plattser = new HashSet<>();
+	public boolean add(Typ platts){
+		if(plattser.contains(platts)){
+			return false;
+		}else {
+			plattser.add(platts);
+			return true;
+		}
+	}
 
 	/*
 	 * tar emot en nod och stoppar in den i grafen. Om noden redan finns i
 	 * grafen blir det ingen förändring.
 	 */
 
-	public connect();
+	public connect(){
+		
+	}
 
 	/*
 	 * – tar två noder, en sträng (namnet på förbindelsen) och ett heltal
@@ -24,7 +37,9 @@ public class ListGraph {
 	 * bågarna i par: från nod 1 till nod 2 och tvärtom.
 	 */
 
-	public setConnectionWeight();
+	public setConnectionWeight(){
+		
+	}
 
 	/*
 	 * ◦ setConnectionWeight – tar två noder och ett heltal (förbindelsens nya
