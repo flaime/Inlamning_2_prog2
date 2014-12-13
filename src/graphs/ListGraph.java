@@ -1,16 +1,25 @@
 package graphs;
 
+import java.nio.channels.IllegalSelectorException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.*;
+
 
 public class ListGraph<Typ> {
-
-	HashSet<Typ> plattser = new HashSet<>();
+	
+	private Map<Typ, ArrayList<Edge<Typ>>> nodFörbindelser = new HashMap<>();//inehåler alla noder och förbindelser
+	
+	
 	public boolean add(Typ platts){
-		if(plattser.contains(platts)){
+		if(nodFörbindelser.containsKey(platts)) {
+			System.out.println("denn finns redan----------------------------------------");
 			return false;
 		}else {
-			plattser.add(platts);
+			System.out.println("platts = " + platts + " finns ej");
+			nodFörbindelser.put(platts, new ArrayList<Edge<Typ>>());
 			return true;
 		}
 	}
@@ -20,7 +29,23 @@ public class ListGraph<Typ> {
 	 * grafen blir det ingen förändring.
 	 */
 
-	public connect(){
+	public void connect(Typ nod1, Typ nod2, String namn, int vikt){
+		if (existerarNod(nod1, nod2) == false) {
+			throw new IllegalArgumentException(); //någon eller båda plattser finns ej
+		}
+		if(vikt < 0)
+			throw new IllegalSelectorException(); //om vikten är mindre än 0 
+		
+		if (getEdgeBetween(nod1,nod2) != null) {
+			throw new IllegalStateException();//om en båge redan finns
+		}
+		
+		//skulle kunna skapa dem direkt när jag lägger in dem...
+		Edge<Typ> förbindelseTill = new Edge<Typ>(nod1, vikt, namn); 
+		Edge<Typ> förbindelseFrån = new Edge<Typ>(nod2, vikt, namn);
+			
+		nodFörbindelser.get(nod2).add(förbindelseTill);
+		nodFörbindelser.get(nod1).add(förbindelseFrån);
 		
 	}
 
@@ -37,7 +62,27 @@ public class ListGraph<Typ> {
 	 * bågarna i par: från nod 1 till nod 2 och tvärtom.
 	 */
 
-	public setConnectionWeight(){
+	public void setConnectionWeight(Typ nod1, Typ nod2, int nyVikt){
+		if (existerarNod(nod1, nod2) == false) {
+			throw new NoSuchElementException();
+		}
+		if(nyVikt < 0)
+			throw new IllegalArgumentException();
+		for(Edge<Typ> nodFörbindelse: nodFörbindelser.get(nod1)){ //för ena förbindelsen
+			if(nodFörbindelse.getDestination() == nod2){
+				nodFörbindelse.setWeight(nyVikt);
+				//TODO fråga: om jag borde lägga in en breake här så att den inte går ignom onödigt många?
+			}
+				
+		}
+		
+		for(Edge<Typ> nodFörbindelse: nodFörbindelser.get(nod2)){//för andra förebindelsen
+			if(nodFörbindelse.getDestination() == nod1){
+				nodFörbindelse.setWeight(nyVikt);
+				//TODO fråga: om jag borde lägga in en breake här så att den inte går ignom onödigt många?
+			}
+				
+		}
 		
 	}
 
@@ -50,14 +95,21 @@ public class ListGraph<Typ> {
 	 * IllegalArgumentException genereras.
 	 */
 
-	public getNodes();
+	public Set<Typ> getNodes(){
+		return nodFörbindelser.keySet();
+	}
 
 	/*
 	 * returnerar en kopia av mängden av alla noder (kopior av referenser till
 	 * nodobjekten, nodobjekten själva ska inte kopieras)
 	 */
 
-	public getEdgesFrom();
+	public ArrayList<Edge<Typ>> getEdgesFrom(Typ nod){
+		if (existerarNod(nod) == false) {
+			throw new NoSuchElementException();
+		}
+		return nodFörbindelser.get(nod);
+	}
 
 	/*
 	 * – tar en nod och returnerar en kopia av samlingen av alla bågar som leder
@@ -65,15 +117,51 @@ public class ListGraph<Typ> {
 	 * NoSuchElementException genereras.
 	 */
 
-	public getEdgeBetween();
-
+	public Edge<Typ> getEdgeBetween(Typ nod1, Typ nod2){//TODO denna metod tror jag inte gör som den ska/inte funkar
+		if (existerarNod(nod1, nod2) == false) {
+			throw new NoSuchElementException();
+		}
+		for( Edge<Typ> nod: nodFörbindelser.get(nod1))
+			if(nod1 == nod)
+				return nod;
+		return null;
+	}
 	/*
 	 * tar två noder och returnerar bågen mellan dessa noder. Om någon av
 	 * noderna saknas i grafen ska undantaget NoSuchElementException genereras.
 	 * Om det inte finns någon båge mellan noderna resturneras null.
 	 */
+	
+	private boolean existerarNod(Typ nod1, Typ nod2){
+		if((!nodFörbindelser.containsKey(nod1) && !nodFörbindelser.containsKey(nod2)) == false || (!nodFörbindelser.containsKey(nod1) || !nodFörbindelser.containsKey(nod2)) == false)
+			return false;
+		return true;
+	}
+	private boolean existerarNod(Typ nod1){
+		if(nodFörbindelser.containsKey(nod1) == false)
+			return false;
+		return true;
+	}
+	
+	/*
+	 * Två metoder för att avgöra om en eller två noder existerar eller ej
+	 */
+	
+	
 
-	public toString();
+	public String toString(){
+		String innehåll =""; //"[ ";
+		for(Typ nykeln : nodFörbindelser.keySet()){
+			innehåll += "[Nyckel = " + nykeln;
+			for(Edge<Typ> förbindelser: nodFörbindelser.get(nykeln)){
+				innehåll += ", " + förbindelser.toString();
+			}
+			innehåll += "]\n";
+		}
+//		innehåll += "]";
+		
+		return innehåll;
+	}
 
 	/*
 	 * returnerar en lång sträng med strängar tagna från nodernas
@@ -81,7 +169,9 @@ public class ListGraph<Typ> {
 	 * att man får information om en nod per rad för förbättrad läsbarhet.
 	 */
 
-	public disconnect();
+	public void disconnect(){
+		//TODO skriv metoden
+	}
 
 	/*
 	 * behövs för högre betyg
@@ -91,7 +181,9 @@ public class ListGraph<Typ> {
 	 * har någon direktförbindelse
 	 */
 
-	public remove();
+	public void remove(){
+		//TODO skriv metoden
+	}
 
 	/*
 	 * tar en nod och tar bort den och alla bågar från och till den från grafen,
@@ -109,7 +201,9 @@ public class ListGraph<Typ> {
 	 * OBS!
 	 */
 
-	public pathExists();
+	public void pathExists(){
+		//TODO skriv metoden
+	}
 
 	/*
 	 * tar två noder och returnerar true om det finns en väg genom grafen från
@@ -119,7 +213,9 @@ public class ListGraph<Typ> {
 	 * en graf.
 	 */
 
-	public getPath();
+	public void getPath(){
+		//TODO skirv metoden
+	}
 
 	/*
 	 * tar två noder och returnerar en lista (java.util.List) med bågar som
