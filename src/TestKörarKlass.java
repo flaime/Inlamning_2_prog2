@@ -16,7 +16,8 @@ public class TestKörarKlass {
 		Platts malmö = new Platts("Malmö");
 		lg.add(malmö);
 		
-		lg.add(new Platts("Uppsala"));
+		Platts uppsala =new Platts("Uppsala"); 
+		lg.add(uppsala);
 		lg.add(new Platts("Karsdag"));
 		lg.add(new Platts("Övik"));
 		lg.add(new Platts("Vällingby"));
@@ -24,7 +25,7 @@ public class TestKörarKlass {
 //		lg.add(new Platts("storfors"));
 //		lg.add(new Platts("storfors"));
 //		lg.add(new Platts("storfors"));
-		
+//		
 		
 		lg.connect(stockholm, björnsö, "Bil", 10);
 		lg.connect(björnsö, malmö, "flyg", 2);
@@ -34,7 +35,11 @@ public class TestKörarKlass {
 		System.out.println(lg.toString());
 		
 //		lg.disconnect(malmö, björnsö);
-		lg.remove(björnsö);
+		
+		
+		System.out.println(lg.getEdgesFrom(uppsala));
+//		lg.getEdgeFromTest();
+//		lg.remove(björnsö);
 		System.out.println("\n\n");
 		
 		System.out.println(lg.toString());

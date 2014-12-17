@@ -17,12 +17,11 @@ public class Platts { //implements Comparable{
 		return namn;
 	}
 	
-
+	@Override
 	public int hashCode() {
 		int hash = namn.hashCode();
-//		if(namn== "storfors")
-//	    	System.out.println(hash);
-		return 2;
+		//System.out.println("namn" + namn + hash);
+		return hash;
 	}
 	
 	@Override
@@ -30,7 +29,8 @@ public class Platts { //implements Comparable{
 		if(obj != this.getClass())
 			return false;
 		Platts p = (Platts) obj;
-		if(p.getNamn() == this.namn)
+		//System.out.println("p = " + p.namn);
+		if(p.getNamn().equalsIgnoreCase(this.namn))
 			return true;
 		return false;
 	}

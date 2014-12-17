@@ -11,10 +11,8 @@ public class ListGraph<Typ> {
 	
 	public boolean add(Typ platts){
 		if(nodFörbindelser.containsKey(platts)) {
-//			System.out.println("denn finns redan----------------------------------------");
 			return false;
 		}else {
-//			System.out.println("platts = " + platts + " finns ej");
 			nodFörbindelser.put(platts, new ArrayList<Edge<Typ>>());
 			return true;
 		}
@@ -101,12 +99,16 @@ public class ListGraph<Typ> {
 	 * nodobjekten, nodobjekten själva ska inte kopieras)
 	 */
 
-	public ArrayList<Edge<Typ>> getEdgesFrom(Typ nod){
-		if (existerarNod(nod) == false) {
+	public ArrayList<Edge<Typ>> getEdgesFrom(Typ noden){
+		if (existerarNod(noden) == false) {
 			throw new NoSuchElementException();
 		}
-		return nodFörbindelser.get(nod);
+		return nodFörbindelser.get(noden);
 	}
+	
+//	public ArrayList<Edge<Typ>>  getEdgeFromTest(){//TODO ta bort
+//		return getEdgesFrom((Typ) nodFörbindelser.get(nodFörbindelser.keySet().toArray()[0]).toArray()[0]);
+//	}
 
 	/*
 	 * – tar en nod och returnerar en kopia av samlingen av alla bågar som leder

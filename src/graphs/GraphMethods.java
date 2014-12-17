@@ -28,7 +28,7 @@ public class GraphMethods {
 		if (härÄrJag == till|| härÄrJag.equals(till)) {//TODO ta reda på vad det borde vara här?
 			return true;
 		}else {//här ska metoden anropas igen med test på var den ska andropas TODO frtsätt här!!
-			if(lg.getEdgesFrom(härÄrJag)){
+			if(lg.getEdgeFromTest().isEmpty()){//lg.getEdgesFrom(härÄrJag)){
 				
 			}
 			
