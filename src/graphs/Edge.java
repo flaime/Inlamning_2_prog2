@@ -54,7 +54,23 @@ public class Edge<T> {
 	 */
 	
 	public String toString(){
-		return "namn = " + name + " wikten = " + weight + " destinationen är = " + dest.toString();
+		return "namn = " + name + " wikten = " + weight + " destinationen = " + dest.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Edge e;
+		if(obj == this.getClass())
+			e =  (Edge) obj;
+		else {
+			return false;
+		}
+		
+		if(e.getName().equals(this.name) && e.getWeight() == this.weight) //versalkänslig!
+			return true;
+		else {
+			return false;
+		}
 	}
 	
 	/*

@@ -2,7 +2,7 @@
 
 
 
-public class Platts implements Comparable{
+public class Platts { //implements Comparable{
 
 	private String namn;
 	public Platts(String namn) {
@@ -20,8 +20,8 @@ public class Platts implements Comparable{
 
 	public int hashCode() {
 		int hash = namn.hashCode();
-		if(namn== "storfors")
-	    	System.out.println(hash);
+//		if(namn== "storfors")
+//	    	System.out.println(hash);
 		return 2;
 	}
 	
@@ -35,12 +35,12 @@ public class Platts implements Comparable{
 		return false;
 	}
 	
-	public int compareTo(Object o){
-		if(obj != this.getClass())
-			return false;
-		Platts p = (Platts) obj;
-		if(p.getNamn() == this.namn)
-			return true;
-		return false;
-	}
+//	public int compareTo(Object o){
+//		if(obj != this.getClass())
+//			return false;
+//		Platts p = (Platts) obj;
+//		if(p.getNamn() == this.namn)
+//			return true;
+//		return false;
+//	}
 }
